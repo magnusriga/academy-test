@@ -1,0 +1,39 @@
+# Info on how to clone multiple repositories using a GitHub action:
+# https://stackoverflow.com/questions/68255301/how-to-clone-multiple-private-repositories-using-github-actions/68255302#68255302
+# Instead use deploy keys (SSH keys for cloning repos):
+# https://stackoverflow.com/questions/57612428/cloning-private-github-repository-within-organisation-in-actions
+
+# - name: Run multi repo cloning script
+# env:
+#     PRIVATE_SSH_KEY: ${{ secrets.PRIVATE_SSH_KEY }} # `PAT_SECRET` is a secret that contains your PAT (Personal access token)
+# run: ".github/clone_repos.sh"
+# shell: bash
+
+# In .github/clone_repos.sh:
+#   eval `ssh-agent -s`
+#   ssh-add - <<< '${{ secrets.PRIVATE_SSH_KEY }}'
+#   pip install -r requirements.txt
+
+# In requirements.txt:
+# -e git+git@github.com:magnusriga/nfront.git#egg=nfront
+
+name: Deploy nFront
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Install requirements
+        run: |
+          eval `ssh-agent -s`
+          ssh-add - <<< '${{ secrets.PRIVATE_SSH_KEY }}'
+          pip install -r requirements.txt
+
+      - name: Test with pytest
+        run: |
+          pytest ./tests
