@@ -30,7 +30,7 @@ jobs:
 
       - name: Clone repo
         env:
-          PRIVATE_SSH_KEY: ${{ secrets.PRIVATE_SSH_KEY }} # `PAT_SECRET` is a secret that contains your PAT (Personal access token)
+          PRIVATE_SSH_KEY: ${{ secrets.PRIVATE_SSH_KEY }}
         run: ".github/clone_repos.sh"
         # run: |
         #   eval `ssh-agent -s`
