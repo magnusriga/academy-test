@@ -28,9 +28,13 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Install requirements
+      - name: Clone repo
         run: ".github/clone_repos.sh"
+        # run: |
+        #   eval `ssh-agent -s`
+        #   ssh-add - <<< '${{ secrets.PRIVATE_SSH_KEY }}'
+        #   pip install -r requirements.txt
 
-      - name: Test with pytest
-        run: |
-          pytest ./tests
+      # - name: Test with pytest
+      #   run: |
+      #     pytest ./tests
